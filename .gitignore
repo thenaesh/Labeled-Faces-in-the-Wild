@@ -1,3 +1,8 @@
 *.npy
 .ipynb_checkpoints/
 shape_predictor_68_face_landmarks.dat
+README.aux
+README.log
+README.synctex.gz
+README.out
+README.toc

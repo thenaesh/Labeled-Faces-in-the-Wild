@@ -1,0 +1,79 @@
+\documentclass{article}
+
+\usepackage{hyperref}
+
+\title{README \\ CS3244 Homework 3}
+\author{Thenaesh Elango, Lee Yi Min, Lim Jia Yee}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Introduction}
+We can recognise faces after seeing them for a few times. We have essentially ``learnt" how to recognise these faces, especially from the more distinctive features of these faces. They include the shape of the face, the curvature of the eyes, the slope of the nose, the thickness of the lips, and so on. We aim to extend this ``learning" to computer programs.
+
+\section{Description}
+In the field of machine learning, this problem of face recognition, given previously labelled faces, is a classification problem. These previously labelled data will be referred to as the training data. \\
+
+The learner, essentially a computer program, attempts to create a general formula based on the training data to ``recognise" other face images not in the training data.
+
+\subsection{Data Sets}
+There are 966 training samples and 322 test samples. Each sample has 1850 features, where each feature is simply a pixel. The faces belong to a total of 7 people, and thus there are 7 classes.
+
+\subsection{Learning Models Used}
+\subsubsection{Initial Approach: Support Vector Machine (SVM) only}
+\paragraph{Model} The initial models used were SVMs. All 966 training samples and their 1850 features were passed into the SVM. This means there was no feature dimensionality reduction and no cross-validation. \\
+
+There were a total of more than 80 SVM models with various combinations of arguments, namely kernels, costs, gammas (applicable for radial basis function (RBF) and polynomial kernel only), degrees (applicable for polynomial kernel only). \\
+
+The kernels used were the linear kernel, the polynomial kernel of degrees 2 to 4 inclusive, and the RBF kernel. \\
+
+The following ranges are of step size power of 10: The range of costs used was 0.01 to 100 inclusive. The range of gammas used was 0.0001 to 1 inclusive.
+
+\paragraph{Classification} For the SVM models using the RBF kernel, all of the test samples were classified under the same class, which seemed to be suspicious. On the other hand, for the SVM models using the linear or the polynomial kernels, the test samples had a diverse classification, and the SVM models generally agree on the classification for each of the test samples for most of the combinations of the arguments. \\
+
+A possible explanation for the uniform classification under the RBF kernel could be that RBF is intolerant to slack \cite{bib-01} and thus could not separate the data points which were likely to be close together due to the sheer number of features, many of which could be similar as the human face does not deviate drastically. \\
+
+As for the linear and polynomial kernels, the classifications were agreeable amongst these models due to:
+\begin{enumerate}
+	\item Rather low degrees compared to the number of features
+	\item Arguments for costs, gamma (if applicable) are within a small range
+\end{enumerate}
+
+For any disagreements, the mode of the classification was chosen. \\
+
+The simple SVM models were decent as the first step, but could have been improved in the following:
+\begin{enumerate}
+	\item Ensure the images were oriented in the same angle
+	\item Gather the more significant features (or pixels) for classification to reduce noise, time, and space complexity
+	\item Need to try out other models and also think about whether the possible natures of the data set could affect the learning of the different models
+\end{enumerate}
+
+As such, in the next batch of models, a new approach with the improvements above in mind will be explored.
+\newpage
+
+\subsection{Second Approach: Recursive Feature Elimination with Cross-Validation (RFECV)}
+
+\newpage
+
+\subsection{Final Approach: Principal Component Analysis (PCA), SVM, and Neural Networks (NN)}
+
+\newpage
+
+\subsection{Other Approaches: Bagging, Decision Trees, and Adaptive Boosting (Adaboost)}
+
+
+\section{File Listing}
+\newpage
+\section{Statement of Teams' Independent Work}
+\newpage
+\begin{thebibliography}{20}
+% bib-01
+\bibitem{bib-01}
+	Martin C.,
+	\emph{\href{https://charlesmartin14.wordpress.com/2012/02/06/kernels_part_1/}{What is an RBF Kernel?}},
+	2012, Feb 6.
+\end{thebibliography}
+\end{document}
