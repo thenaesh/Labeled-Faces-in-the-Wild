@@ -28,7 +28,7 @@ There are 966 training samples and 322 test samples. Each sample has 1850 featur
 % 3
 \section{Learning Models Used}
 % 3.1
-\subsection{Initial Approach: Support Vector Machine (SVM) only}
+\subsection{Initial Approach: Raw Support Vector Machines and Neural Networks}
 The initial models used were SVMs. All 966 training samples and their 1850 features were passed into the SVM. This means there was no feature dimensionality reduction and no cross-validation. \\
 
 There were a total of more than 80 SVM models with various combinations of arguments, namely kernels, costs, gammas (applicable for radial basis function (RBF) and polynomial kernel only), degrees (applicable for polynomial kernel only). \\
@@ -56,39 +56,48 @@ The simple SVM models were decent as the first step, but could have been improve
 	\item Need to try out other models and also think about whether the possible natures of the data set could affect the learning of the different models
 \end{enumerate}
 
-As such, in the next batch of models, a new approach with the improvements above in mind will be explored.
+We tried using neural networks in place of SVMs, and the results were similar.
+
+As such, we need a new approach that takes into account the above-mentioned improvements.
 \newpage
 
 % 3.2
-\subsection{Second Approach: Recursive Feature Elimination with Cross-Validation (RFECV)}
-The recursive feature elimination (RFE) learning model formulates the weights on each of the features via the training data. The number of features will shrink with every iteration of the entire learning procedure, by removing the features with less significant weights after each iteration. \\
+\subsection{Chosen Approach: Neural Networks with Image Alignment, Scaling and PCA}
+\label{sec:3.2}
+\paragraph{}
+In our chosen approach, we use a method known as principal component analysis, which uses unsupervised learning to identify key features and discard those features that are not essential. We then scale the data to have a zero mean and unit variance.
 
-For RFECV, the optimal number of features is acquired via cross-validation, and the prediction will be based on this pruned set of features. \\
+\paragraph{}
+Before doing so, however, we preprocess the images to remove some unnecessary artifacts that naturally manifest in photos. In particular, we want to make sure that the images are upright and that the face in each photo is not slanted. To do this, we perform an operation to align the eyes each image in a standard manner.
 
-% Need halp from Thenaesh
+\paragraph{}
+After performing the aforeme
+
+\paragraph{}
+The training in our chosen approach may be outlined as follows:
+\begin{enumerate}
+	\item Process the images in the training set to make sure that they are oriented in the same angle and are aligned.
+	\item Scale the images in the training set to make sure the classifiers used behave optimally.
+	\item Reduce the number of features in the training set.
+	\item Train a neural network on the training set.
+\end{enumerate}
 \newpage
 
 % 3.3
-\subsection{Final Approach: Principal Component Analysis (PCA), SVM, and Neural Networks}
-\label{sec:3.3}
-% Need halp from Thenaesh
-\newpage
-
-% 3.4
 \subsection{Other Approaches}
-% 3.4.1
+% 3.3.1
 \subsubsection{Decision Trees, and Adaptive Boosting (Adaboost)}
 Since the features are simply about the individual pixels in the face images, the training data used in this section's approach also underwent PCA transformation in order to attain the more significant features out of all the individual pixels. \\
 
 A reduced number of features is especially important for decision trees (and Adaboost) because it is expected that each individual pixel will not be effective in maximising information gain. Each pixel is not only affected by the face in the image, but also external noise such as lighting, orientation, and shadow. Hence, an individual pixel by itself may not be effective ``decision makers". \\
 
-However, despite feature dimentionality reduction with PCA, the F1 scores for both decision trees and Adaboost classifiers lose out to the other classifiers (SVM and neural networks). The F1 score for decision trees has an average of 0.39 while that for the Adaboost is 0.41. \\
+However, despite feature dimensionality reduction with PCA, the F1 scores for both decision trees and Adaboost classifiers lose out to the other classifiers (SVM and neural networks). The F1 score for decision trees has an average of 0.39 while that for the Adaboost is 0.41. \\
 
 Adaboost is an ensemble method which uses several weak learners (i.e. decision stumps in this context) to combine into a stronger learner. Since Adaboost tries to correct the misclassifications, anomalous or noisy data will steer Adaboost away from the true classification as the learning algorithm attempts to classify these data points with deceiving features \cite{bib-02}. \\
 
 It is expected that the data is noisy, as several external factors affect the quality of the images as discussed earlier in this section.
 
-% 3.4.2
+% 3.3.2
 \subsubsection{Bagging}
 It was noticed that 966 training samples may not be enough for the most accurate classification. In this section, bagging (also known as bootstrap aggregating) was attempted on the SVM model in \hyperref[sec:3.3]{Section 3.3 Final Approach}. \\
 
