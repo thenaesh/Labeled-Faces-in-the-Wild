@@ -68,10 +68,10 @@ As such, we need a new approach that takes into account the above-mentioned impr
 In our chosen approach, we use a method known as principal component analysis, which uses unsupervised learning to identify key features and discard those features that are not essential. We then scale the data to have a zero mean and unit variance.
 
 \paragraph{}
-Before doing so, however, we preprocess the images to remove some unnecessary artifacts that naturally manifest in photos. In particular, we want to make sure that the images are upright and that the face in each photo is not slanted. To do this, we perform an operation to align the eyes each image in a standard manner.
+Before scaling and applying PCA, however, we preprocess the images to remove some unnecessary artifacts that naturally manifest in photos. In particular, we want to make sure that the images are upright and that the face in each photo is not slanted. To do this, we perform an operation to align the eyes each image in a standard manner.
 
 \paragraph{}
-After performing the aforeme
+After performing the preprocessing on the training points, we perform a 10-fold split of the preprocessed training set $(X,y)$ into all possible combinations of $X_{train}, y_{train}, X_{test}, y_{test}$. For each $X_{train}, y_{train}, X_{test}, y_{test}$, we train a neural network on $X_{train}, y_{train}$, and subsequently use that neural network to predict $X_{test}$ and compute the $F_1$ score of the prediction against $y_{test}$. We then have one neural network and $F_1$ score for each possible split. We keep the neural network with the best $F_1$ score and discard the rest. This neural network, together with the associated PCA transformer and scaler, forms the trained model.
 
 \paragraph{}
 The training in our chosen approach may be outlined as follows:
@@ -81,6 +81,12 @@ The training in our chosen approach may be outlined as follows:
 	\item Reduce the number of features in the training set.
 	\item Train a neural network on the training set.
 \end{enumerate}
+
+\paragraph{}
+When using the trained model to predict the classifications of a dataset $X'$, we first perform the image alignment preprocessing on $X'$. We then scale and apply the same PCA transform we applied to train the model. Finally, we use the neural network to predict the model.
+
+\paragraph{}
+This approach gives generally much better $F_1$ scores, typically crossing $0.9$.
 \newpage
 
 % 3.3
